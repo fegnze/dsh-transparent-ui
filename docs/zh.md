@@ -1,8 +1,8 @@
 # Aqua — DSH 透明玻璃主题插件
 
-<img src="icon.svg" width="64" height="64" alt="Aqua 玻璃水滴图标">
+<img src="../icon.svg" width="64" height="64" alt="Aqua 玻璃水滴图标">
 
-[English](<README.md>) | 中文
+[English](<../README.md>) | 中文
 
 Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操作栏、侧边栏、输入框、统计栏和设置面板使用半透明材质，左侧流体背景、粒子鲸鱼与交互网格位于应用内容下方。
 
@@ -17,16 +17,16 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 - **DSH 0.1.5-rc.2 兼容适配：**[lllong0908/DSH-Transparent-UI-Plugin](https://github.com/lllong0908/DSH-Transparent-UI-Plugin)。
 - **本 DSH 0.2.0-rc.2 桌面兼容分支：**[fegnze/dsh-transparent-ui](https://github.com/fegnze/dsh-transparent-ui)。
 
-本分支主要修复安装、客户端 API 兼容性、桌面渲染与交互问题，不替代原项目的作者身份。二次分发时请保留原项目、原贡献者及历次适配者的署名。贡献者列表见 [CONTRIBUTORS.md](<CONTRIBUTORS.md>)，来源说明见 [UPSTREAM_NOTICE.md](<UPSTREAM_NOTICE.md>)。
+本分支主要修复安装、客户端 API 兼容性、桌面渲染与交互问题，不替代原项目的作者身份。二次分发时请保留原项目、原贡献者及历次适配者的署名。贡献者列表见 [CONTRIBUTORS.md](<../CONTRIBUTORS.md>)，来源说明见 [UPSTREAM_NOTICE.md](<../UPSTREAM_NOTICE.md>)。
 
-沿用 [GNU AGPL-3.0 许可证](<LICENSE>)；包元数据声明为 `AGPL-3.0-only`。
+沿用 [GNU AGPL-3.0 许可证](<../LICENSE>)；包元数据声明为 `AGPL-3.0-only`。
 
 ## 兼容范围
 
 | 项目 | 当前目标 |
 | --- | --- |
 | 插件包名 | `dsh-transparent-ui` |
-| 当前插件版本 | 见 [`package.json`](package.json) |
+| 当前插件版本 | 见 [`package.json`](../package.json) |
 | 目标 DSH 版本 | 桌面版 `0.2.0-rc.2` |
 | 桌面配置 Profile | `desktop` |
 | 推荐安装来源 | 本 GitHub 仓库的 `main` 分支 |
@@ -62,7 +62,7 @@ dsh plugin --profile web add dsh-client-ui-aqua
 
 它不是本桌面适配版的安装或更新方式。旧的未带作用域构建使用过已移除的客户端 runtime API。本分支的 npm 身份是 [`dsh-transparent-ui`](https://www.npmjs.com/package/dsh-transparent-ui)，从 npm 安装时应使用此完整包名。GitHub `main` 可能包含尚未发布到 npm 的变更，应核对已安装版本，不要把两种来源视为完全相同。
 
-继承保留的 [PowerShell 安装器](<install.ps1>) 面向旧版 Web 配置，仅作历史工具保留，**不作为推荐的桌面安装入口**。
+继承保留的 [PowerShell 安装器](<../install.ps1>) 面向旧版 Web 配置，仅作历史工具保留，**不作为推荐的桌面安装入口**。
 
 ## 功能与使用
 
@@ -125,7 +125,7 @@ npm run bundle
 npm test
 ```
 
-[构建脚本](<scripts/build.mjs>) 生成 Host 入口和 DSH Module Loader 客户端包。本仓库随源码提供可运行的构建包，使 GitHub 安装不依赖原作者的 monorepo。DSH 客户端 peer 由桌面 Host 提供；隔离工具安装不会让插件成为独立 Web 应用。
+[构建脚本](<../scripts/build.mjs>) 生成 Host 入口和 DSH Module Loader 客户端包。本仓库随源码提供可运行的构建包，使 GitHub 安装不依赖原作者的 monorepo。DSH 客户端 peer 由桌面 Host 提供；隔离工具安装不会让插件成为独立 Web 应用。
 
 可选的真实 Chromium 交互回归（自行指定浏览器可执行文件）：
 
@@ -133,7 +133,7 @@ npm test
 DSH_TEST_CHROME='/path/to/chrome' npm run test:browser
 ```
 
-[浏览器回归脚本](<test/toolbar.browser.mjs>) 使用独立无头测试页，包含桌面拖拽规则、`display:contents` 插槽包装、顶栏背后滚动和正文高层级遮挡元素。检查实际拖拽排除样式、稳定的悬停位置，并分别在悬停下压开启／关闭时验证**连续 100 次输入点击**。临时测试页／浏览器 Profile 位于已忽略的 `.npm-stage/`。
+[浏览器回归脚本](<../test/toolbar.browser.mjs>) 使用独立无头测试页，包含桌面拖拽规则、`display:contents` 插槽包装、顶栏背后滚动和正文高层级遮挡元素。检查实际拖拽排除样式、稳定的悬停位置，并分别在悬停下压开启／关闭时验证**连续 100 次输入点击**。临时测试页／浏览器 Profile 位于已忽略的 `.npm-stage/`。
 
 ### 验证边界
 
@@ -147,7 +147,7 @@ DSH_TEST_CHROME='/path/to/chrome' npm run test:browser
 
 下列图片继承自上游仓库，用于展示原主题。**不是本分支当前桌面验收截图**；流体显示范围及其他细节可能与本分支不同。
 
-![原项目 Aqua 示例 1](<assets/1.png>)
-![原项目 Aqua 示例 2](<assets/2.png>)
-![原项目 Aqua 示例 3](<assets/3.png>)
-![原项目 Aqua 示例 4](<assets/4.png>)
+![原项目 Aqua 示例 1](<../assets/1.png>)
+![原项目 Aqua 示例 2](<../assets/2.png>)
+![原项目 Aqua 示例 3](<../assets/3.png>)
+![原项目 Aqua 示例 4](<../assets/4.png>)

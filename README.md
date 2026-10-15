@@ -2,7 +2,7 @@
 
 <img src="icon.svg" width="64" height="64" alt="Aqua glass droplet icon">
 
-English | [中文](<README.zh.md>)
+English | [中文](<docs/zh.md>)
 
 A customizable glass theme for DeepSeek Harness. The conversation toolbar, sidebar, composer, statistics bar and settings panel use translucent surfaces, with a sidebar fluid backdrop, a particle whale and an interactive mesh behind the application content.
 
