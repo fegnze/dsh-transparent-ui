@@ -1,35 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <title>Aqua glass droplet</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <title>Aqua — iridescent glass droplet</title>
   <defs>
-    <linearGradient id="aqua-body" x1="18" y1="12" x2="46" y2="57" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#97F6FF"/>
-      <stop offset=".42" stop-color="#34CFEA"/>
-      <stop offset="1" stop-color="#4263F4"/>
+    <linearGradient id="body" x1="64" y1="48" x2="178" y2="223" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00E9FF"/><stop offset=".34" stop-color="#39BFFF"/><stop offset=".64" stop-color="#B8B1FF"/><stop offset=".85" stop-color="#F6D8FF"/><stop offset="1" stop-color="#FAF6FF"/>
     </linearGradient>
-    <linearGradient id="aqua-edge" x1="19" y1="10" x2="45" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D8FCFF"/>
-      <stop offset=".55" stop-color="#72E1FF"/>
-      <stop offset="1" stop-color="#587CFF"/>
-    </linearGradient>
-    <linearGradient id="aqua-wave" x1="12" y1="34" x2="48" y2="51" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#9FFFF3"/>
-      <stop offset="1" stop-color="#25B8DE"/>
-    </linearGradient>
-    <linearGradient id="aqua-gloss" x1="23" y1="19" x2="35" y2="39" gradientUnits="userSpaceOnUse">
-      <stop stop-color="white" stop-opacity=".85"/>
-      <stop offset="1" stop-color="white" stop-opacity=".1"/>
-    </linearGradient>
-    <clipPath id="aqua-clip">
-      <path d="M32 7C28 14 12 29 12 39a20 20 0 0 0 40 0C52 29 36 14 32 7Z"/>
-    </clipPath>
+    <radialGradient id="pearl" cx=".76" cy=".65" r=".66"><stop stop-color="#FFF3FF" stop-opacity=".96"/><stop offset="1" stop-color="#F0DCFF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="rim" x1="53" y1="49" x2="191" y2="221" gradientUnits="userSpaceOnUse"><stop stop-color="#06EEFF"/><stop offset=".45" stop-color="#98C4FF"/><stop offset=".75" stop-color="#EDBFFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+    <linearGradient id="shine" x1="73" y1="67" x2="101" y2="158" gradientUnits="userSpaceOnUse"><stop stop-color="#D5FFFF" stop-opacity=".95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9"/></filter>
+    <clipPath id="drop"><path d="M128 29C117 29 109 46 97 62C76 91 49 123 49 153C49 197 83 227 128 227C173 227 207 197 207 153C207 123 180 91 159 62C147 46 139 29 128 29Z"/></clipPath>
   </defs>
-  <path d="M32 7C28 14 12 29 12 39a20 20 0 0 0 40 0C52 29 36 14 32 7Z" fill="url(#aqua-body)"/>
-  <g clip-path="url(#aqua-clip)">
-    <path d="M10 38c9-7 16-7 24-2 8 5 13 5 20 1v26H10Z" fill="url(#aqua-wave)" fill-opacity=".8"/>
-    <path d="M10 46c9 5 16 5 24 0s13-5 20-1v18H10Z" fill="#4364F2" fill-opacity=".7"/>
-    <path d="M12 38c8-6 14-6 22-2s13 5 18 2" fill="none" stroke="#D4FFFF" stroke-opacity=".65" stroke-width="1.5"/>
+  <path d="M128 29C117 29 109 46 97 62C76 91 49 123 49 153C49 197 83 227 128 227C173 227 207 197 207 153C207 123 180 91 159 62C147 46 139 29 128 29Z" fill="none" stroke="url(#rim)" stroke-width="5" opacity=".5" filter="url(#glow)"/>
+  <path d="M128 29C117 29 109 46 97 62C76 91 49 123 49 153C49 197 83 227 128 227C173 227 207 197 207 153C207 123 180 91 159 62C147 46 139 29 128 29Z" fill="url(#body)" stroke="url(#rim)" stroke-width="2.5"/>
+  <g clip-path="url(#drop)">
+    <ellipse cx="161" cy="161" rx="74" ry="78" fill="url(#pearl)"/>
+    <path d="M67 173C100 140 124 196 187 162" fill="none" stroke="#897EFF" stroke-opacity=".45" stroke-width="18" filter="url(#soft)"/>
+    <path d="M62 160C99 136 124 190 195 160" fill="none" stroke="#FFFFFF" stroke-opacity=".52" stroke-width="4" stroke-linecap="round"/>
+    <path d="M112 62C97 86 72 119 69 145" fill="none" stroke="url(#shine)" stroke-width="11" stroke-linecap="round" filter="url(#glow)"/>
+    <path d="M69 188C90 218 150 231 180 201" fill="none" stroke="#FFFFFF" stroke-opacity=".65" stroke-width="6" filter="url(#glow)"/>
   </g>
-  <path d="M32 7C28 14 12 29 12 39a20 20 0 0 0 40 0C52 29 36 14 32 7Z" fill="none" stroke="url(#aqua-edge)" stroke-width="1.5" stroke-linejoin="round"/>
-  <path d="M29 19c-5 6-11 13-11 19" fill="none" stroke="url(#aqua-gloss)" stroke-width="4" stroke-linecap="round"/>
-  <path d="m47 11 1.5 4.5L53 17l-4.5 1.5L47 23l-1.5-4.5L41 17l4.5-1.5Z" fill="#AEF9FF"/>
 </svg>

@@ -26,7 +26,7 @@ test('package exposes a self-contained SVG icon accepted by desktop manifest con
     const artwork = document.documentElement
     assert.equal(artwork.tagName.toLowerCase(), 'svg')
     assert.equal(artwork.getAttribute('xmlns'), 'http://www.w3.org/2000/svg')
-    assert.equal(artwork.getAttribute('viewBox'), '0 0 64 64')
+    assert.equal(artwork.getAttribute('viewBox'), '0 0 256 256')
     assert.equal(document.querySelector('parsererror'), null)
     assert.equal(document.querySelector('script, foreignObject, image, use'), null, 'icon must not depend on external resources/code')
     assert.doesNotMatch(svg, /\son\w+\s*=|\b(?:href|src)\s*=|@import|url\(\s*['"]?(?:https?:|data:)/i)
