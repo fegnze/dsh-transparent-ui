@@ -137,7 +137,7 @@ test('package declares current store dependency and ships profile overlay', () =
 
 test('renamed package metadata and invariant self-reference stay consistent', async () => {
   assert.equal(pkg.name, 'dsh-transparent-ui')
-  assert.equal(pkg.version, '1.3.20')
+  assert.match(pkg.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/, 'package version must be a release version, not a fixed historical value')
   assert.equal(pkg.repository.url, 'git+https://github.com/fegnze/dsh-transparent-ui.git')
   assert.equal(pkg.homepage, 'https://github.com/fegnze/dsh-transparent-ui')
   assert.equal(pkg.bugs.url, 'https://github.com/fegnze/dsh-transparent-ui/issues')
