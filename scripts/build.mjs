@@ -19,7 +19,8 @@ const cssPlugin = {
       })
       const js = result.outputFiles.find(f => f.path.endsWith('.js')).text
       const css = result.outputFiles.find(f => f.path.endsWith('.css')).text
-      const id = `${pkg.name}/${path.basename(file)}`
+      // Preserve stylesheet hooks; dataset.plugin below follows current package ownership.
+      const id = `@deepseek-ai/dsh-client-ui-aqua/${path.basename(file)}`
       return {
         loader: 'js',
         contents: `${js}\nconst id = ${JSON.stringify(id)};\nif (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css=' + JSON.stringify(id) + ']')) {\nconst tag = document.createElement('style'); tag.dataset.plugin = ${JSON.stringify(pkg.name)}; tag.dataset.pluginCss = id; tag.textContent = ${JSON.stringify(css)}; document.head.appendChild(tag);\n}`,

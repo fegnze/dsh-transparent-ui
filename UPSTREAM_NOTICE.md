@@ -31,9 +31,9 @@ This repository is a compatibility update of **DSH-Transparent-UI-Plugin**.
 ## Current DSH 0.2.0-rc.2 desktop compatibility fork
 
 - Maintainer: [fegnze](https://github.com/fegnze)
-- Repository: https://github.com/fegnze/DSH-Transparent-UI-Plugin
+- Repository: https://github.com/fegnze/dsh-transparent-ui
 - Target: DeepSeek Harness desktop `0.2.0-rc.2`
-- Package: `@deepseek-ai/dsh-client-ui-aqua`
+- Package: `dsh-transparent-ui`
 
 The current fork removes the now-obsolete settingsScope binding described in the historical section, registers controls in General settings, and fixes client bundle identity, icon exports and CSS module collisions. Further changes address sidebar-only fluid bounds, ambient contrast, unified primary glass materials, under-toolbar scrolling and native desktop drag-region conflicts.
 

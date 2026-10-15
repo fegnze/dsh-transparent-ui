@@ -15,7 +15,7 @@ The original theme, visual design and implementation belong to the original proj
 - **Original project / maintainer:** [WYH66666666/DSH-Transparent-UI-Plugin](https://github.com/WYH66666666/DSH-Transparent-UI-Plugin) — [WYH66666666](https://github.com/WYH66666666).
 - **Original project contributor:** [imccyu](https://github.com/imccyu).
 - **DSH 0.1.5-rc.2 compatibility adaptation:** [lllong0908/DSH-Transparent-UI-Plugin](https://github.com/lllong0908/DSH-Transparent-UI-Plugin).
-- **This DSH 0.2.0-rc.2 desktop compatibility fork:** [fegnze/DSH-Transparent-UI-Plugin](https://github.com/fegnze/DSH-Transparent-UI-Plugin).
+- **This DSH 0.2.0-rc.2 desktop compatibility fork:** [fegnze/dsh-transparent-ui](https://github.com/fegnze/dsh-transparent-ui).
 
 This fork focuses on installation, client API compatibility and desktop rendering/interaction fixes. It does not replace the original authorship. Please retain the original project, contributor and prior adaptation credits when redistributing. See [CONTRIBUTORS.md](<CONTRIBUTORS.md>) and [UPSTREAM_NOTICE.md](<UPSTREAM_NOTICE.md>) for attribution details.
 
@@ -25,7 +25,7 @@ Distributed under [GNU AGPL-3.0](<LICENSE>); package metadata declares `AGPL-3.0
 
 | Item | Current target |
 | --- | --- |
-| Plugin package | `@deepseek-ai/dsh-client-ui-aqua` |
+| Plugin package | `dsh-transparent-ui` |
 | Current plugin version | `1.3.20` |
 | Target DSH version | Desktop `0.2.0-rc.2` |
 | Desktop profile | `desktop` |
@@ -41,7 +41,7 @@ Other DSH versions are not guaranteed. A working legacy Web CLI does not prove c
 2. Enter this repository URL:
 
    ```text
-   https://github.com/fegnze/DSH-Transparent-UI-Plugin
+   https://github.com/fegnze/dsh-transparent-ui
    ```
 
 3. Use branch `main` (the default); install and enable the plugin if prompted.
@@ -141,7 +141,7 @@ The [browser regression](<test/toolbar.browser.mjs>) uses an isolated headless f
 - `npm run test:browser`: real Chromium fixture hit-testing; **not** attachment to the live DSH desktop or a test of Electron's macOS native input routing.
 - Live desktop acceptance is still required for the latest toolbar fix, native window behavior, video/WebGL and combinations with other plugins.
 
-When reporting a problem, include the DSH version, installed plugin version, Mica/Compatibility mode, color scheme, relevant slider values and a screenshot or Console error. Do not paste chat contents, credentials or private file data into a public issue. Report fork-specific issues to [this repository's issue tracker](https://github.com/fegnze/DSH-Transparent-UI-Plugin/issues).
+When reporting a problem, include the DSH version, installed plugin version, Mica/Compatibility mode, color scheme, relevant slider values and a screenshot or Console error. Do not paste chat contents, credentials or private file data into a public issue. Report fork-specific issues to [this repository's issue tracker](https://github.com/fegnze/dsh-transparent-ui/issues).
 
 ## Upstream visual examples
 

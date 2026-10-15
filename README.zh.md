@@ -15,7 +15,7 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 - **原项目／维护者：**[WYH66666666/DSH-Transparent-UI-Plugin](https://github.com/WYH66666666/DSH-Transparent-UI-Plugin) — [WYH66666666](https://github.com/WYH66666666)。
 - **原项目贡献者：**[imccyu](https://github.com/imccyu)。
 - **DSH 0.1.5-rc.2 兼容适配：**[lllong0908/DSH-Transparent-UI-Plugin](https://github.com/lllong0908/DSH-Transparent-UI-Plugin)。
-- **本 DSH 0.2.0-rc.2 桌面兼容分支：**[fegnze/DSH-Transparent-UI-Plugin](https://github.com/fegnze/DSH-Transparent-UI-Plugin)。
+- **本 DSH 0.2.0-rc.2 桌面兼容分支：**[fegnze/dsh-transparent-ui](https://github.com/fegnze/dsh-transparent-ui)。
 
 本分支主要修复安装、客户端 API 兼容性、桌面渲染与交互问题，不替代原项目的作者身份。二次分发时请保留原项目、原贡献者及历次适配者的署名。贡献者列表见 [CONTRIBUTORS.md](<CONTRIBUTORS.md>)，来源说明见 [UPSTREAM_NOTICE.md](<UPSTREAM_NOTICE.md>)。
 
@@ -25,7 +25,7 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 
 | 项目 | 当前目标 |
 | --- | --- |
-| 插件包名 | `@deepseek-ai/dsh-client-ui-aqua` |
+| 插件包名 | `dsh-transparent-ui` |
 | 当前插件版本 | `1.3.20` |
 | 目标 DSH 版本 | 桌面版 `0.2.0-rc.2` |
 | 桌面配置 Profile | `desktop` |
@@ -41,7 +41,7 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 2. 输入本仓库地址：
 
    ```text
-   https://github.com/fegnze/DSH-Transparent-UI-Plugin
+   https://github.com/fegnze/dsh-transparent-ui
    ```
 
 3. 使用 `main` 分支（默认）；安装完成后，按提示启用插件。
@@ -141,7 +141,7 @@ DSH_TEST_CHROME='/path/to/chrome' npm run test:browser
 - `npm run test:browser`：真实 Chromium 测试页的命中检查；**不会连接真实 DSH 桌面，也不能验证 Electron 的 macOS 原生输入路由**。
 - 最新顶栏修复、原生窗口行为、视频／WebGL、与其他插件组合，仍需要真实桌面验收。
 
-反馈问题时请提供 DSH 版本、实际安装的插件版本、云母／兼容模式、深浅色模式、相关滑块值，以及截图或控制台错误。不要向公开 Issue 粘贴聊天正文、凭证或私密文件数据。本分支问题请提交至[本仓库 Issue](https://github.com/fegnze/DSH-Transparent-UI-Plugin/issues)。
+反馈问题时请提供 DSH 版本、实际安装的插件版本、云母／兼容模式、深浅色模式、相关滑块值，以及截图或控制台错误。不要向公开 Issue 粘贴聊天正文、凭证或私密文件数据。本分支问题请提交至[本仓库 Issue](https://github.com/fegnze/dsh-transparent-ui/issues)。
 
 ## 原项目效果示例
 

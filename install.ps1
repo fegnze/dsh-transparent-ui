@@ -6,7 +6,7 @@
 # The script can also download this fork's latest release directly:
 #
 # One command (from any directory):
-#   powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest 'https://github.com/lllong0908/DSH-Transparent-UI-Plugin/raw/main/install.ps1' -OutFile install.ps1; .\install.ps1"
+#   powershell -ExecutionPolicy Bypass -Command "Invoke-WebRequest 'https://github.com/fegnze/dsh-transparent-ui/raw/main/install.ps1' -OutFile install.ps1; .\install.ps1"
 #
 # It does three things:
 #   1. get the repo (git clone, or plain zip download when git is missing)
@@ -20,7 +20,7 @@
 # one; pass a URL or local path to install another clone.
 
 param(
-    [string]$Source = 'https://github.com/lllong0908/DSH-Transparent-UI-Plugin',
+    [string]$Source = 'https://github.com/fegnze/dsh-transparent-ui',
     [string]$Version = 'latest',
     [string]$DshHome = $env:DSH_HOME,
     [string]$Profile = 'web'
@@ -32,7 +32,7 @@ $ErrorActionPreference = 'Stop'
 if (-not $DshHome) { $DshHome = Join-Path $env:USERPROFILE '.dsh' }
 if (-not (Test-Path $DshHome)) { throw "DSH home not found: $DshHome (override with -DshHome)" }
 
-$plugin      = '@deepseek-ai/dsh-client-ui-aqua'
+$plugin      = 'dsh-transparent-ui'
 $nodeModules = Join-Path $DshHome 'profiles\node_modules'
 $linkPath    = Join-Path $nodeModules $plugin
 $patchFile   = Join-Path $DshHome "profiles\$Profile\cordis.patch.yml"
@@ -84,8 +84,7 @@ if ($isRemote) {
         $inner = Get-ChildItem $extractDir -Directory | Select-Object -First 1
         if (-not $inner) { throw "zip contains no package directory: $zipUrl" }
         if (Test-Path $cloneDir) { Remove-Item $cloneDir -Recurse -Force }
-        # The plugin name is scoped (@deepseek-ai/...), so create the parent
-        # level too - Move-Item cannot create multi-level destination paths.
+        # Ensure the persistent plugin parent exists before moving the source.
         New-Item -ItemType Directory -Force -Path (Split-Path $cloneDir -Parent) | Out-Null
         Move-Item $inner.FullName $cloneDir
         Remove-Item $zipFile -Force
@@ -130,7 +129,7 @@ Write-Host "[3/3] Registering in $patchFile" -ForegroundColor Cyan
 $entryText = @'
 - insert:
     - id: ui-aqua
-      name: '@deepseek-ai/dsh-client-ui-aqua'
+      name: 'dsh-transparent-ui'
 '@
 if (-not (Test-Path $patchFile)) {
     Set-Content -Path $patchFile -Value ($entryText + "`n") -Encoding UTF8

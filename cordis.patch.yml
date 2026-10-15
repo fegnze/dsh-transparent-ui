@@ -1,5 +1,5 @@
-# Register the exact scoped package installed by the plugin manager.
+# Register the exact package installed by the plugin manager.
 # The host import and browser roster must resolve the same package identity.
 - insert:
     - id: ui-aqua
-      name: '@deepseek-ai/dsh-client-ui-aqua'
+      name: 'dsh-transparent-ui'

@@ -21,7 +21,7 @@ This file is the fixed attribution list for this compatibility repository. GitHu
 ## DSH 0.2.0-rc.2 desktop compatibility fork
 
 - [fegnze](https://github.com/fegnze): maintainer of this desktop compatibility fork
-- Current repository: https://github.com/fegnze/DSH-Transparent-UI-Plugin
+- Current repository: https://github.com/fegnze/dsh-transparent-ui
 - Scope: client API/build compatibility, desktop glass material, ambient layering, and toolbar interaction fixes
 
 This section identifies the current fork separately; it does not replace the original project or earlier adaptation credits above.

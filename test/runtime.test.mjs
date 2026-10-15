@@ -113,6 +113,8 @@ test('client starts without removed settingsScope and exposes reachable settings
   // Compiling CSS modules independently must not reuse minified class names.
   const classOwners = new Map()
   for (const style of window.document.querySelectorAll('style[data-plugin-css]')) {
+    assert.equal(style.dataset.plugin, pkg.name)
+    assert.ok(style.dataset.pluginCss.startsWith('@deepseek-ai/dsh-client-ui-aqua/'), 'preserve CSS hook identity')
     for (const match of style.textContent.matchAll(/\.([A-Za-z_][\w-]*)\s*(?=[{,: >+~.#\[])/g)) {
       const name = match[1]
       const owner = classOwners.get(name)
@@ -133,10 +135,23 @@ test('package declares current store dependency and ships profile overlay', () =
   assert.equal(pkg.engines.dsh, '0.2.0-rc.2')
 })
 
-test('profile overlay imports the installed scoped package, not the obsolete npm name', async () => {
+test('renamed package metadata and invariant self-reference stay consistent', async () => {
+  assert.equal(pkg.name, 'dsh-transparent-ui')
+  assert.equal(pkg.version, '1.3.20')
+  assert.equal(pkg.repository.url, 'git+https://github.com/fegnze/dsh-transparent-ui.git')
+  assert.equal(pkg.homepage, 'https://github.com/fegnze/dsh-transparent-ui')
+  assert.equal(pkg.bugs.url, 'https://github.com/fegnze/dsh-transparent-ui/issues')
+  const invariant = await import('dsh-transparent-ui/invariant')
+  let owner
+  await invariant.apply({ invariants: { register(name) { owner = name; return () => {} } } })
+  assert.equal(owner, pkg.name)
+})
+
+test('profile overlay imports the renamed package while retaining its component ID', async () => {
   const patch = await readFile(new URL('../cordis.patch.yml', import.meta.url), 'utf8')
   const name = patch.match(/^\s+name:\s*['"]([^'"]+)['"]/m)?.[1]
   assert.equal(name, pkg.name)
+  assert.match(patch, /id: ui-aqua/)
   const host = await import(new URL('../lib/index.js', import.meta.url))
   assert.equal(typeof host.apply, 'function')
 })
