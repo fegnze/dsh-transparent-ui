@@ -26,7 +26,7 @@ Distributed under [GNU AGPL-3.0](<LICENSE>); package metadata declares `AGPL-3.0
 | Item | Current target |
 | --- | --- |
 | Plugin package | `dsh-transparent-ui` |
-| Current plugin version | `1.3.20` |
+| Current plugin version | See [`package.json`](package.json) |
 | Target DSH version | Desktop `0.2.0-rc.2` |
 | Desktop profile | `desktop` |
 | Recommended installation | This GitHub repository, branch `main` |
@@ -60,7 +60,7 @@ The legacy command below addresses a **different, unscoped package**, not this f
 dsh plugin --profile web add dsh-client-ui-aqua
 ```
 
-It is not an installation or upgrade procedure for this desktop adaptation. The old unscoped build used removed client runtime APIs. Use the GitHub source above, rather than assuming npm resolves this repository's current version.
+It is not an installation or upgrade procedure for this desktop adaptation. The old unscoped build used removed client runtime APIs. This fork's npm identity is [`dsh-transparent-ui`](https://www.npmjs.com/package/dsh-transparent-ui); use that exact package name when installing from npm. GitHub `main` may contain changes not yet published to npm, so verify the installed version rather than treating the two sources as interchangeable.
 
 The inherited [PowerShell installer](<install.ps1>) targets the older Web setup. It is retained as historical tooling, **not** as the recommended desktop installer.
 

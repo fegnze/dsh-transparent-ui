@@ -26,7 +26,7 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 | 项目 | 当前目标 |
 | --- | --- |
 | 插件包名 | `dsh-transparent-ui` |
-| 当前插件版本 | `1.3.20` |
+| 当前插件版本 | 见 [`package.json`](package.json) |
 | 目标 DSH 版本 | 桌面版 `0.2.0-rc.2` |
 | 桌面配置 Profile | `desktop` |
 | 推荐安装来源 | 本 GitHub 仓库的 `main` 分支 |
@@ -60,7 +60,7 @@ Aqua 为 DeepSeek Harness 提供可调节的玻璃质感主题：会话顶部操
 dsh plugin --profile web add dsh-client-ui-aqua
 ```
 
-它不是本桌面适配版的安装或更新方式。旧的未带作用域构建使用过已移除的客户端 runtime API；请使用上面的 GitHub 来源，不要假定 npm 会解析到本仓库的最新版本。
+它不是本桌面适配版的安装或更新方式。旧的未带作用域构建使用过已移除的客户端 runtime API。本分支的 npm 身份是 [`dsh-transparent-ui`](https://www.npmjs.com/package/dsh-transparent-ui)，从 npm 安装时应使用此完整包名。GitHub `main` 可能包含尚未发布到 npm 的变更，应核对已安装版本，不要把两种来源视为完全相同。
 
 继承保留的 [PowerShell 安装器](<install.ps1>) 面向旧版 Web 配置，仅作历史工具保留，**不作为推荐的桌面安装入口**。
 
