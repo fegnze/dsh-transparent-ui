@@ -132,7 +132,10 @@ test('package declares current store dependency and ships profile overlay', () =
   assert.equal(pkg.peerDependencies['@deepseek-ai/dsh-client-store'], '^0.2.0-rc.2')
   assert.equal(pkg.peerDependencies['@deepseek-ai/dsh-client-runtime'], undefined)
   assert.ok(pkg.files.includes('cordis.patch.yml'))
-  assert.equal(pkg.engines.dsh, '0.2.0-rc.2')
+  const supportedRuntimes = pkg.engines.dsh.split('||').map(version => version.trim())
+  assert.ok(supportedRuntimes.includes('0.2.0-rc.2'), 'retain the previously supported runtime')
+  assert.ok(supportedRuntimes.includes('0.2.1-rc.2'), 'allow the verified desktop runtime')
+  assert.ok(supportedRuntimes.every(version => /^\d+\.\d+\.\d+-rc\.\d+$/.test(version)), 'do not silently allow unverified future runtimes')
 })
 
 test('renamed package metadata and invariant self-reference stay consistent', async () => {

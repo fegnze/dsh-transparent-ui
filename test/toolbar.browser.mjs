@@ -1,4 +1,5 @@
-// Optional real Chromium hit-test regression. No browser package/server required:
+// 可选的普通 Chromium DOM/CSS 与 CDP 输入回归，不执行 Electron 原生 app-region 命中。
+// 即使重复点击全部通过，也不能证明真实桌面可拖动或“添加插件”可点击。
 // DSH_TEST_CHROME=/path/to/chrome node test/toolbar.browser.mjs
 import assert from 'node:assert/strict'
 import { spawn } from 'node:child_process'
@@ -8,7 +9,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { build } from 'esbuild'
 
 const chrome = process.env.DSH_TEST_CHROME || process.argv[2]
-if (!chrome) throw new Error('Set DSH_TEST_CHROME to a Chromium executable to run native input regression.')
+if (!chrome) throw new Error('设置 DSH_TEST_CHROME 为 Chromium 可执行文件以运行 DOM 输入回归（非 Electron 原生验收）。')
 const root = fileURLToPath(new URL('..', import.meta.url))
 const scratch = path.join(root, '.npm-stage')
 await mkdir(scratch, { recursive: true })
@@ -29,7 +30,7 @@ const js = (await build({
 })).outputFiles[0].text
 const hostDrag = `html[data-platform=darwin] [data-window-drag]{-webkit-app-region:drag}
   html[data-platform=darwin] [data-window-drag-recall]{-webkit-app-region:no-drag}
-  html[data-platform=darwin] :is(button,[role=tab]){-webkit-app-region:no-drag}`
+  html[data-platform=darwin] :is(button,a,input,select,textarea,summary,[contenteditable=true],[tabindex],[role=dialog],[role=alertdialog],[role=menu],[role=listbox],[role=tooltip],[role=button],[role=link],[role=tab],[role=menuitem],[role=menuitemcheckbox],[role=menuitemradio],[role=option],[role=checkbox],[role=radio],[role=switch],[role=slider],[role=combobox],[role=textbox]){-webkit-app-region:no-drag}`
 const fixture = `<html data-platform="darwin" data-dsh-aqua data-dsh-float data-dsh-aqua-spotlight>
   <head><meta charset="utf-8"><style>${css}</style><style>
   ${hostDrag}
@@ -43,9 +44,11 @@ const fixture = `<html data-platform="darwin" data-dsh-aqua data-dsh-float data-
   .adversarialBodyChild{position:absolute;left:0;right:0;top:-120px;height:180px;z-index:9999}
   </style></head><body><div class="frame"><div class="sidebarCol"></div><div class="centerCol">
   <div data-phase="active"><div data-slot="conversation.header"><header data-window-drag>
-    <button id="preset"><svg><rect width="16" height="16" /></svg> Preset</button>
-    <button id="mode">Mode</button><button id="chat" role="tab">Chat</button>
-    <button id="trajectory" role="tab">Trajectory</button><button id="menu"><svg><circle r="6" cx="8" cy="8" /></svg></button>
+    <div data-conversation-header-leading><div data-slot="conversation.header.leading"><button id="preset"><svg data-window-drag><rect data-window-drag width="16" height="16" /></svg> Preset</button></div></div>
+    <div data-slot="conversation.session.header"><button id="mode">Mode</button><button id="chat" role="tab">Chat</button>
+    <button id="trajectory" role="tab">Trajectory</button><button id="menu"><svg><circle r="6" cx="8" cy="8" /></svg></button></div>
+    <div id="blank" style="flex:1;min-width:32px;height:36px"></div>
+    <div id="recall" data-window-drag-recall><span data-window-drag><svg data-window-drag><path data-window-drag /></svg></span></div>
   </header></div><div data-slot="conversation.body"><div class="chatBody" data-conversation-content>
     <div data-conversation-scroll><div class="transcript">Transcript under glass</div></div>
     <div class="adversarialBodyChild"></div>
@@ -110,6 +113,26 @@ try {
     const wait = () => window.clicks ? resolve(true) : requestAnimationFrame(wait); wait();
   })`)
   assert.equal(ready, true)
+  const regions = await evaluate(`(() => {
+    const region = node => getComputedStyle(node).webkitAppRegion;
+    const header = document.querySelector('header');
+    const result = { header: region(header), blank: region(document.getElementById('blank')),
+      recall: [...document.querySelectorAll('#recall, #recall *')].map(region) };
+    for (const [name, owner] of [['headerRecall', header], ['bodyRecall', document.body]]) {
+      owner.setAttribute('data-window-drag-recall', '');
+      result[name] = [header, ...header.querySelectorAll('*')].map(region);
+      owner.removeAttribute('data-window-drag-recall');
+    }
+    result.restored = region(header);
+    const blank = document.getElementById('blank').getBoundingClientRect();
+    result.blankHit = document.elementFromPoint(blank.x + blank.width / 2, blank.y + blank.height / 2)?.id;
+    return result;
+  })()`)
+  assert.equal(regions.header, 'no-drag')
+  assert.equal(regions.blank, 'no-drag')
+  assert.equal(regions.blankHit, 'blank', '空白区域不能被其他内容遮挡')
+  for (const key of ['recall', 'headerRecall', 'bodyRecall']) assert.ok(regions[key].every(value => value === 'no-drag'), key)
+  assert.equal(regions.restored, 'no-drag')
   let attempted = 0
   for (const press of [false, true]) {
     await evaluate(`document.documentElement.toggleAttribute('data-dsh-aqua-press', ${press});
@@ -150,7 +173,8 @@ try {
   const clicks = await evaluate('window.clicks')
   assert.ok(Object.values(clicks).every(count => count === 20), JSON.stringify(clicks))
   console.log(JSON.stringify({ attempted, received: Object.values(clicks).reduce((a,b) => a+b, 0), pressModes: 2,
-    dragRegion: 'no-drag', stableToolbar: true, adversarialBodyZ: 9999, fixture: 'isolated Chromium, not live DSH' }))
+    dragRegion: 'no-drag', controls: 'no-drag', recall: 'no-drag', stableToolbar: true, adversarialBodyZ: 9999,
+    fixture: '隔离 Chromium，非真实 DSH App', electronNativeHitTest: false, desktopAcceptance: '未执行' }))
   await send('Browser.close')
 } finally {
   clearTimeout(deadline)
