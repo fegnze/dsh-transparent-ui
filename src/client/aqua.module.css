@@ -832,9 +832,11 @@ html[data-dsh-float][data-dsh-aqua-wallpaper][data-dsh-aqua-media='video'] body[
 }
 
 /* Glass surfaces: menus and dialogs follow the site's frosted recipe
-   (standard `backdrop-filter` only —see the composer card note). */
+   (standard `backdrop-filter` only —see the composer card note).
+   Dropdown lists must stay legible over chat text, so the fill is NOT scaled
+   by the frost knob: it holds a ~94% floor. */
 [data-dsh-float] [role='menu'] {
-  background: color-mix(in srgb, rgb(255 255 255) calc(62% * var(--dsh-aqua-frost, 1)), transparent);
+  background: color-mix(in srgb, rgb(255 255 255) 94%, transparent);
   backdrop-filter: blur(var(--dsh-aqua-blur, 14px));
 }
 
@@ -842,7 +844,23 @@ html[data-dsh-float][data-dsh-aqua-wallpaper][data-dsh-aqua-media='video'] body[
    translucent override and no backdrop blur —the override made the panel
    muddy and the blur scrambled its fixed-position layout. */
 [data-dsh-float] body[data-ds-dark-theme] [role='menu'] {
-  background: color-mix(in srgb, rgb(28 32 42) calc(68% * var(--dsh-aqua-frost, 1)), transparent);
+  background: color-mix(in srgb, rgb(28 32 42) 94%, transparent);
+}
+
+/* Host MenuSurface (slash-command list, dropdowns, pickers) paints its fill on
+   an inner [data-menu-material] > [aria-hidden] layer from
+   --dsw-menu-surface-fill (58% light / 45% dark). When the surface lives
+   inside the composer card — itself a backdrop-filter owner and therefore a
+   backdrop root — the surface's own blur cannot reach the chat behind it, so
+   the thin fill lets raw text show through. Raise the fill to a near-opaque
+   floor in every mode (compat included). Selector is attribute-based on
+   purpose: the host's module classes are hashed. */
+[data-dsh-aqua] body [data-menu-material] > [aria-hidden='true']:first-child {
+  background: color-mix(in srgb, rgb(244 248 253) 95%, transparent);
+}
+
+[data-dsh-aqua] body[data-ds-dark-theme] [data-menu-material] > [aria-hidden='true']:first-child {
+  background: color-mix(in srgb, rgb(20 29 43) 95%, transparent);
 }
 
 /* ---------- Page edge fades: 5px gradient blur bands pinned to the top and

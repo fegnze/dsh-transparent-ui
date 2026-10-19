@@ -27,7 +27,7 @@ Distributed under [GNU AGPL-3.0](<LICENSE>); package metadata declares `AGPL-3.0
 | --- | --- |
 | Plugin package | `dsh-transparent-ui` |
 | Current plugin version | See [`package.json`](package.json) |
-| Target DSH version | Desktop `0.2.0-rc.2` |
+| Target DSH version | Desktop `0.2.0-rc.2` and `0.2.1-rc.2` |
 | Desktop profile | `desktop` |
 | Recommended installation | This GitHub repository, branch `main` |
 
@@ -93,7 +93,7 @@ Blur and frost are different controls: **blur softens background detail**, while
 The toolbar, composer and settings panel share these primary material values. They can still look different because of different backdrop content, modal masks and shadows. The fused composer/statistics bar uses **one outer glass plate**, not two stacked fills. Other small surfaces may retain their own base alpha recipes.
 
 > [!NOTE]
-> With Aqua enabled, the floating conversation toolbar and its descendants are **non-draggable** to avoid Electron window-drag regions consuming clicks. Use other window drag areas. The plugin does not change those other regions.
+> The attempted toolbar-drag restoration has been reverted. CSS currently marks every `header[data-window-drag]` and its descendants as `no-drag`, not just conversation toolbars; other drag regions are unaffected. This is a rollback, not proof that window dragging or the Add plugin button is fixed. Chromium/DOM tests do not exercise Electron's native app-region hit testing; dragging and button interaction still require acceptance testing in the desktop application.
 
 ## What this fork changes
 
