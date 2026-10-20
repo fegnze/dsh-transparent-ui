@@ -805,7 +805,8 @@ export class AquaLayer {
   private applySettings(): void {
     const style = document.documentElement.style
     style.setProperty('--dsh-aqua-sidebar-font-size', `${this.settings.sidebarFontSize}px`)
-    style.setProperty('--dsh-aqua-sidebar-meta-size', `${Math.max(11, this.settings.sidebarFontSize - 3)}px`)
+    style.setProperty('--dsh-aqua-sidebar-session-size', `${this.settings.sidebarFontSize - 1}px`)
+    style.setProperty('--dsh-aqua-sidebar-meta-size', `${this.settings.sidebarFontSize - 3}px`)
     style.setProperty('--dsh-aqua-blur', `${this.settings.blur}px`)
     // Frost 0-100 → a 0-1.4 alpha multiplier (50 = 1x). Capped so max frost
     // stays translucent frosted glass instead of collapsing to a solid

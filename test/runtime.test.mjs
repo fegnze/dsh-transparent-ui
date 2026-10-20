@@ -102,7 +102,23 @@ test('client starts without removed settingsScope and exposes reachable settings
         assert.equal(handle.state.sidebarFontSize, expected)
         assert.equal(window.localStorage.getItem('dsh.ui-aqua.sidebarFontSize'), String(expected))
         assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), `${expected}px`)
-        assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-meta-size'), `${Math.max(11, expected - 3)}px`)
+        assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-session-size'), `${expected - 1}px`)
+        assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-meta-size'), `${expected - 3}px`)
+      }
+      // Exercise the actual rendered stepper, not merely the injected setter.
+      const fontElement = component({ ...injected, t: key => key, useStore: selector => selector(handle.state) }).props.children[0]
+      assert.equal(typeof fontElement.type, 'function')
+      const renderStepper = value => fontElement.type({ ...fontElement.props, value })
+      const flatten = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(flatten)]
+      for (const value of [12, 15, 22]) {
+        const nodes = flatten(renderStepper(value))
+        assert.equal(nodes.filter(n => n.type === 'input' && n.props.type === 'range').length, 0)
+        const up = nodes.find(n => n.props?.['aria-label'] === 'aqua.increaseSidebarFontSize')
+        const down = nodes.find(n => n.props?.['aria-label'] === 'aqua.decreaseSidebarFontSize')
+        assert.equal(up.props.disabled, value === 22)
+        assert.equal(down.props.disabled, value === 12)
+        if (!up.props.disabled) { up.props.onClick(); assert.equal(handle.state.sidebarFontSize, value + 1) }
+        if (!down.props.disabled) { down.props.onClick(); assert.equal(handle.state.sidebarFontSize, value - 1) }
       }
       injected.setSidebarFontSize(19)
       toggle(false)

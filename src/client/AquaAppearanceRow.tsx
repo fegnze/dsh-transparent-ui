@@ -15,6 +15,7 @@ import type { PropsLocale, PropsRuntime, PropsStore } from '@deepseek-ai/dsh-cli
 // Type-only: pulls the `settings.general.item` SlotMap merge.
 import type {} from '@deepseek-ai/dsh-client-ui-settings-general/client'
 import { fileToDataUrl, Knob, Segmented } from './AquaControls.tsx'
+import { SidebarFontSize } from './SidebarFontSize.tsx'
 import { loadVideoHandle, saveVideoBlob, saveVideoHandle } from './wallpaper-store.ts'
 import type { createAquaRowStore } from './settings-store.ts'
 import css from './AquaAppearanceRow.module.css'
@@ -180,7 +181,7 @@ export function AquaAppearanceRow(props: AquaAppearanceRowComponentProps) {
 
   return (
     <div className={css.group}>
-      <Knob label={t('aqua.sidebarFontSize')} value={sidebarFontSize} min={12} max={22} step={1} unit="px" onChange={setSidebarFontSize} />
+      <SidebarFontSize label={t('aqua.sidebarFontSize')} increaseLabel={t('aqua.increaseSidebarFontSize')} decreaseLabel={t('aqua.decreaseSidebarFontSize')} value={sidebarFontSize} onChange={setSidebarFontSize} />
       {/* 模式 */}
       <div className={css.subGroup}>
         <div className={css.subTitle}>{t('aqua.mode')}</div>

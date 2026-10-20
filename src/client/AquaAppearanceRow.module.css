@@ -12,6 +12,20 @@
   border-bottom: 1px solid var(--dsw-alias-border-l2);
 }
 
+.fontRow { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 44px; padding: 8px 0 16px; border-bottom: 1px solid var(--dsw-alias-border-l2); }
+.fontTitle { font-size: 14px; line-height: 22px; color: var(--dsw-alias-label-primary); }
+.fontControl { display: flex; align-items: center; gap: 8px; flex: none; }
+.fontStepper { position: relative; display: flex; align-items: center; justify-content: center; width: 72px; height: 36px; border-radius: 12px; background: var(--dsw-alias-bg-layer-1); color: var(--dsw-alias-label-primary); }
+.fontValue { font-size: 14px; line-height: 22px; font-variant-numeric: tabular-nums; }
+.fontArrows { position: absolute; right: 3px; display: flex; flex-direction: column; gap: 2px; opacity: 0; }
+.fontStepper:hover .fontArrows, .fontStepper:focus-within .fontArrows { opacity: 1; }
+.fontArrow { display: flex; align-items: center; justify-content: center; width: 17px; height: 12px; padding: 0; border: 0; border-radius: 3px; background: transparent; color: inherit; cursor: pointer; }
+.fontArrow:hover:not(:disabled) { background: var(--dsw-alias-interactive-bg-hover); }
+.fontArrow:disabled { opacity: .35; cursor: default; }
+.fontArrow:focus-visible { outline: 2px solid var(--dsw-alias-brand-primary); }
+.fontUnit { font-size: 14px; line-height: 22px; color: var(--dsw-alias-label-secondary); }
+@media (hover: none) { .fontArrows { opacity: 1; } }
+
 /* One titled sub-group: title over its control stack. */
 .subGroup {
   display: flex;
