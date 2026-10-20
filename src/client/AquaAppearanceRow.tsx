@@ -23,6 +23,8 @@ import css from './AquaAppearanceRow.module.css'
 export interface AquaAppearanceRowInjected {
   /** Set the rendering mode. */
   setMode: (value: 'mica' | 'compat') => void
+  /** Set independent left-sidebar typography, px. */
+  setSidebarFontSize: (value: number) => void
   /** Set the glass blur radius, px. */
   setBlur: (value: number) => void
   /** Set the glass frost amount, 0-100. */
@@ -71,12 +73,13 @@ export type AquaAppearanceRowComponentProps =
  */
 export function AquaAppearanceRow(props: AquaAppearanceRowComponentProps) {
   const {
-    t, setMode, setBlur, setFrost, setFluidHue, setFluidDepth, setBgBrightness,
+    t, setMode, setSidebarFontSize, setBlur, setFrost, setFluidHue, setFluidDepth, setBgBrightness,
     setBackground, setWallpaper, setWhale, setCritters, setMesh, setSpotlight, setPress,
     setWallpaperBlur, setWallpaperFrost, setVideoBlur, setVideoBrightness, authorizeVideo, useStore,
   } = props
   const enabled = useStore(s => s.enabled)
   const mode = useStore(s => s.mode)
+  const sidebarFontSize = useStore(s => s.sidebarFontSize)
   const blur = useStore(s => s.blur)
   const frost = useStore(s => s.frost)
   const fluidHue = useStore(s => s.fluidHue)
@@ -177,6 +180,7 @@ export function AquaAppearanceRow(props: AquaAppearanceRowComponentProps) {
 
   return (
     <div className={css.group}>
+      <Knob label={t('aqua.sidebarFontSize')} value={sidebarFontSize} min={12} max={22} step={1} unit="px" onChange={setSidebarFontSize} />
       {/* 模式 */}
       <div className={css.subGroup}>
         <div className={css.subTitle}>{t('aqua.mode')}</div>

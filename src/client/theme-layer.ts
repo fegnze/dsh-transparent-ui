@@ -218,6 +218,8 @@ function writeEnabled(value: boolean): void {
 export interface AquaSettings {
   /** Rendering mode: mica (frosted floating cards) or the stock layout with a generic glass material. */
   mode: 'mica' | 'compat'
+  /** Left-sidebar primary text size, px; independent of conversation content. */
+  sidebarFontSize: number
   /** Glass backdrop blur radius, px. */
   blur: number
   /** Glass fill opacity, 0-100 (50 = the shipped look; drives the frost multiplier). */
@@ -255,6 +257,7 @@ export interface AquaSettings {
 /** Shipped defaults — what a first-time install sees (the tuned look). */
 const SETTINGS_DEFAULTS: AquaSettings = {
   mode: 'mica',
+  sidebarFontSize: 16,
   blur: 20,
   frost: 7,
   bgBrightness: 50,
@@ -275,6 +278,7 @@ const SETTINGS_DEFAULTS: AquaSettings = {
 
 /** Numeric knob keys and their localStorage names. */
 const NUMERIC_KEYS = {
+  sidebarFontSize: 'dsh.ui-aqua.sidebarFontSize',
   blur: 'dsh.ui-aqua.blur',
   frost: 'dsh.ui-aqua.frost',
   fluidHue: 'dsh.ui-aqua.fluidHue',
@@ -298,6 +302,7 @@ const PRESS_KEY = 'dsh.ui-aqua.press'
 
 /** Clamp a numeric knob into its sane range. */
 function clampSetting(key: NumericKey, value: number): number {
+  if (key === 'sidebarFontSize') return Number.isFinite(value) ? Math.min(22, Math.max(12, Math.round(value))) : 16
   const max = key === 'blur' || key === 'wallpaperBlur' || key === 'videoBlur' ? 40
     : key === 'frost' || key === 'wallpaperFrost' || key === 'bgBrightness' || key === 'videoBrightness' ? 100
       : 360
@@ -586,6 +591,7 @@ export class AquaLayer {
     }
     this.settings = {
       mode: readMode(),
+      sidebarFontSize: readSetting('sidebarFontSize'),
       blur: readSetting('blur'),
       frost: readSetting('frost'),
       fluidHue: readSetting('fluidHue'),
@@ -619,6 +625,15 @@ export class AquaLayer {
     this.settings.mode = value
     writeMode(value)
     if (this.enabled) { this.applySettings(); this.applyTokens() }
+  }
+
+  /** Set independent left-sidebar typography, px. */
+  setSidebarFontSize(value: number): void {
+    const next = clampSetting('sidebarFontSize', value)
+    if (next === this.settings.sidebarFontSize) return
+    this.settings.sidebarFontSize = next
+    writeSetting('sidebarFontSize', next)
+    if (this.enabled) this.applySettings()
   }
 
   /** Set the glass blur radius (px). */
@@ -789,6 +804,8 @@ export class AquaLayer {
   /** Write the knob-driven CSS variables and mode attributes onto <html>. */
   private applySettings(): void {
     const style = document.documentElement.style
+    style.setProperty('--dsh-aqua-sidebar-font-size', `${this.settings.sidebarFontSize}px`)
+    style.setProperty('--dsh-aqua-sidebar-meta-size', `${Math.max(11, this.settings.sidebarFontSize - 3)}px`)
     style.setProperty('--dsh-aqua-blur', `${this.settings.blur}px`)
     // Frost 0-100 → a 0-1.4 alpha multiplier (50 = 1x). Capped so max frost
     // stays translucent frosted glass instead of collapsing to a solid

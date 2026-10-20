@@ -11,6 +11,8 @@ export interface AquaRowState {
   enabled: boolean
   /** Rendering mode: mica or stock layout with generic glass. */
   mode: 'mica' | 'compat'
+  /** Left-sidebar primary text size, px. */
+  sidebarFontSize: number
   /** Glass blur radius, px. */
   blur: number
   /** Glass frost amount, 0-100. */
@@ -53,6 +55,7 @@ export interface AquaRowState {
 export interface AquaSettingsPayload {
   enabled: boolean
   mode: 'mica' | 'compat'
+  sidebarFontSize: number
   blur: number
   frost: number
   fluidHue: number
@@ -86,6 +89,7 @@ export function createAquaRowStore(): EngineStoreHandle<AquaRowState, AquaRowAct
     init: (): AquaRowState => ({
       enabled: true,
       mode: 'mica',
+      sidebarFontSize: 16,
       blur: 20,
       frost: 7,
       fluidHue: 320,
@@ -110,6 +114,7 @@ export function createAquaRowStore(): EngineStoreHandle<AquaRowState, AquaRowAct
         if (revision <= d.revision) return
         d.enabled = next.enabled
         d.mode = next.mode
+        d.sidebarFontSize = next.sidebarFontSize
         d.blur = next.blur
         d.frost = next.frost
         d.fluidHue = next.fluidHue

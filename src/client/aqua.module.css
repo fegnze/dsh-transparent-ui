@@ -7,6 +7,25 @@
  * (never hashed module classes) so the layer survives recompiles.
  * ========================================================================== */
 
+/* Independent sidebar typography. DOM verified on desktop 0.2.1-rc.2 with
+   dsh-better-sidebar: semantic row keys plus preserved CSS-module suffixes.
+   No inherited root font override: dialogs, account menus and chat stay native. */
+[data-dsh-aqua] [data-dsh-sidebar-root] [class*="_panelTitle"],
+[data-dsh-aqua] [data-dsh-sidebar-root] [class*="_newSessionLabel"],
+[data-dsh-aqua] [data-dsh-sidebar-root] [class*="_sectionLabel"],
+[data-dsh-aqua] [data-dsh-sidebar-root] [role="treeitem"][data-row-key] [class*="_title"] {
+  font-size: var(--dsh-aqua-sidebar-font-size, 16px);
+  line-height: 1.5;
+}
+[data-dsh-aqua] [data-dsh-sidebar-root] [role="treeitem"][data-row-key] [class*="_time"] {
+  font-size: var(--dsh-aqua-sidebar-meta-size, 13px);
+  line-height: 1.5;
+}
+/* Keep existing ellipsis/flex layout; enlarge fixed-height rows only when needed. */
+[data-dsh-aqua] [data-dsh-sidebar-root] [role="treeitem"][data-row-key] {
+  min-height: calc(var(--dsh-aqua-sidebar-font-size, 16px) * 1.5 + 8px);
+}
+
 /* ---------- Canvas: body paints the base color; the frame goes transparent
    so the ambient glow (::after) shows through the main column. The
    conversation and details surfaces paint their own opaque base fill over

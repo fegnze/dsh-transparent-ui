@@ -95,6 +95,23 @@ test('client starts without removed settingsScope and exposes reachable settings
     for (const flag of ['whale', 'critters', 'mesh', 'spotlight', 'press']) handle.state[flag] = true
     assert.ok(component({ ...injected, t: key => key, useStore: selector => selector(handle.state) }))
     if (options.id === 'aqua') {
+      assert.equal(handle.state.sidebarFontSize, 16)
+      assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), '16px')
+      for (const [input, expected] of [[20, 20], [100, 22], [-2, 12], [17.6, 18], [NaN, 16], [Infinity, 16]]) {
+        injected.setSidebarFontSize(input)
+        assert.equal(handle.state.sidebarFontSize, expected)
+        assert.equal(window.localStorage.getItem('dsh.ui-aqua.sidebarFontSize'), String(expected))
+        assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), `${expected}px`)
+        assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-meta-size'), `${Math.max(11, expected - 3)}px`)
+      }
+      injected.setSidebarFontSize(19)
+      toggle(false)
+      toggle(true)
+      assert.equal(handle.state.sidebarFontSize, 19)
+      assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), '19px')
+      injected.setMode('mica')
+      assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), '19px')
+      injected.setMode('compat')
       injected.setBlur(40)
       injected.setFrost(100)
       assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-blur'), '40px')
@@ -107,6 +124,15 @@ test('client starts without removed settingsScope and exposes reachable settings
   }
   toggle(false)
   assert.equal(window.document.documentElement.hasAttribute('data-dsh-aqua'), false)
+  for (const dispose of disposers.splice(0).reverse()) dispose()
+  assert.equal(window.document.documentElement.hasAttribute('data-dsh-aqua'), false)
+  // A new plugin lifecycle reads the persisted value (not the old store).
+  entries.length = 0
+  plugin.apply(ctx)
+  const restored = entries.find(e => e.options.id === 'aqua')
+  const restoredHandle = restored.options.store
+  restored.options.inject(Object.fromEntries(Object.entries(restoredHandle.spec.actions).map(([name, action]) => [name, (...args) => action(restoredHandle.state, ...args)])))
+  assert.equal(restoredHandle.state.sidebarFontSize, 19)
   for (const dispose of disposers.reverse()) dispose()
   assert.equal(window.document.documentElement.hasAttribute('data-dsh-aqua'), false)
   assert.equal(window.document.querySelectorAll('style[data-plugin-css]').length, 4)
