@@ -220,6 +220,8 @@ export interface AquaSettings {
   mode: 'mica' | 'compat'
   /** Left-sidebar primary text size, px; independent of conversation content. */
   sidebarFontSize: number
+  /** Sidebar spacing only; independent of mode and typography. */
+  sidebarDensity: 'regular' | 'compact'
   /** Glass backdrop blur radius, px. */
   blur: number
   /** Glass fill opacity, 0-100 (50 = the shipped look; drives the frost multiplier). */
@@ -258,6 +260,7 @@ export interface AquaSettings {
 const SETTINGS_DEFAULTS: AquaSettings = {
   mode: 'mica',
   sidebarFontSize: 16,
+  sidebarDensity: 'regular',
   blur: 20,
   frost: 7,
   bgBrightness: 50,
@@ -290,6 +293,17 @@ const NUMERIC_KEYS = {
   videoBrightness: 'dsh.ui-aqua.videoBrightness',
 } as const
 type NumericKey = keyof typeof NUMERIC_KEYS
+
+const SIDEBAR_DENSITY_KEY = 'dsh.ui-aqua.sidebarDensity'
+
+/** Unknown or missing storage values preserve the existing layout. */
+function readSidebarDensity(): AquaSettings['sidebarDensity'] {
+  try {
+    return localStorage.getItem(SIDEBAR_DENSITY_KEY) === 'compact' ? 'compact' : 'regular'
+  } catch {
+    return 'regular'
+  }
+}
 
 const MODE_KEY = 'dsh.ui-aqua.mode'
 const BACKGROUND_KEY = 'dsh.ui-aqua.background'
@@ -592,6 +606,7 @@ export class AquaLayer {
     this.settings = {
       mode: readMode(),
       sidebarFontSize: readSetting('sidebarFontSize'),
+      sidebarDensity: readSidebarDensity(),
       blur: readSetting('blur'),
       frost: readSetting('frost'),
       fluidHue: readSetting('fluidHue'),
@@ -625,6 +640,18 @@ export class AquaLayer {
     this.settings.mode = value
     writeMode(value)
     if (this.enabled) { this.applySettings(); this.applyTokens() }
+  }
+
+  /** Set sidebar spacing without changing mode or font size. */
+  setSidebarDensity(value: AquaSettings['sidebarDensity']): void {
+    const next = value === 'compact' ? 'compact' : 'regular'
+    this.settings.sidebarDensity = next
+    try {
+      localStorage.setItem(SIDEBAR_DENSITY_KEY, next)
+    } catch {
+      /* in-memory state still applies */
+    }
+    if (this.enabled) this.applySettings()
   }
 
   /** Set independent left-sidebar typography, px. */
@@ -804,6 +831,7 @@ export class AquaLayer {
   /** Write the knob-driven CSS variables and mode attributes onto <html>. */
   private applySettings(): void {
     const style = document.documentElement.style
+    document.documentElement.setAttribute('data-dsh-aqua-sidebar-density', this.settings.sidebarDensity)
     style.setProperty('--dsh-aqua-sidebar-font-size', `${this.settings.sidebarFontSize}px`)
     style.setProperty('--dsh-aqua-sidebar-session-size', `${this.settings.sidebarFontSize - 1}px`)
     style.setProperty('--dsh-aqua-sidebar-meta-size', `${this.settings.sidebarFontSize - 3}px`)
@@ -999,6 +1027,7 @@ export class AquaLayer {
 
   private unmount(): void {
     document.documentElement.removeAttribute(AQUA_ATTRIBUTE)
+    document.documentElement.removeAttribute('data-dsh-aqua-sidebar-density')
     document.documentElement.removeAttribute('data-dsh-float')
     document.documentElement.removeAttribute('data-dsh-compat')
     document.documentElement.removeAttribute('data-dsh-aqua-wallpaper')

@@ -4,7 +4,9 @@ import vm from 'node:vm'
 import { readFile } from 'node:fs/promises'
 import { Window } from 'happy-dom'
 
-const code = await readFile(new URL('../lib/client.js', import.meta.url), 'utf8')
+import { buildSourceClient } from './source-client.mjs'
+
+const code = await buildSourceClient()
 const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
 
 test('client starts without removed settingsScope and exposes reachable settings', async () => {
@@ -49,7 +51,14 @@ test('client starts without removed settingsScope and exposes reachable settings
   const ctx = {
     effect(fn) { const off = fn(); if (off) disposers.push(off) },
     on(name, listener) { listeners.set(name, listener); return () => listeners.delete(name) },
-    locale: { register: () => () => {} },
+    locale: { register(namespace, dictionaries) {
+      assert.equal(namespace, 'settings.aqua')
+      for (const key of ['sidebarDensity', 'sidebarDensityRegular', 'sidebarDensityCompact']) {
+        assert.equal(typeof dictionaries.en[`aqua.${key}`], 'string')
+        assert.equal(typeof dictionaries.zh[`aqua.${key}`], 'string')
+      }
+      return () => {}
+    } },
     theme: {
       getTheme: () => ({ active: { colorScheme: 'light' } }),
       overrideTokens(source, tokens) {
@@ -121,11 +130,41 @@ test('client starts without removed settingsScope and exposes reachable settings
         if (!down.props.disabled) { down.props.onClick(); assert.equal(handle.state.sidebarFontSize, value - 1) }
       }
       injected.setSidebarFontSize(19)
+      assert.equal(handle.state.sidebarDensity, 'regular')
+      const densityAttribute = 'data-dsh-aqua-sidebar-density'
+      const root = window.document.documentElement
+      const renderDensity = () => {
+        const row = component({ ...injected, t: key => key, useStore: selector => selector(handle.state) })
+        const picker = flatten(row).find(n => n.props?.label === 'aqua.sidebarDensity')
+        assert.ok(picker, 'density control is wired into General settings')
+        return flatten(picker.type(picker.props))
+      }
+      for (const density of ['compact', 'regular', 'compact']) {
+        const button = renderDensity().find(n => n.type === 'button' && n.props.children === `aqua.sidebarDensity${density === 'compact' ? 'Compact' : 'Regular'}`)
+        assert.ok(button)
+        button.props.onClick()
+        assert.equal(handle.state.mode, 'compat', 'density must not change rendering mode')
+        assert.equal(handle.state.sidebarDensity, density)
+        assert.equal(entries[0].options.store.state.sidebarDensity, density)
+        assert.equal(window.localStorage.getItem('dsh.ui-aqua.sidebarDensity'), density)
+        assert.equal(root.getAttribute(densityAttribute), density)
+        assert.equal(handle.state.sidebarFontSize, 19)
+        const selected = renderDensity().filter(n => n.type === 'button' && n.props['aria-pressed'])
+        assert.equal(selected.length, 1)
+      }
+      injected.setSidebarDensity('invalid')
+      assert.equal(handle.state.sidebarDensity, 'regular')
+      injected.setSidebarDensity('compact')
       toggle(false)
+      assert.equal(root.hasAttribute(densityAttribute), false)
+      assert.equal(window.localStorage.getItem('dsh.ui-aqua.sidebarDensity'), 'compact')
       toggle(true)
       assert.equal(handle.state.sidebarFontSize, 19)
       assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), '19px')
+      assert.equal(root.getAttribute(densityAttribute), 'compact')
       injected.setMode('mica')
+      assert.equal(root.getAttribute(densityAttribute), 'compact')
+      assert.equal(handle.state.sidebarDensity, 'compact')
       assert.equal(window.document.documentElement.style.getPropertyValue('--dsh-aqua-sidebar-font-size'), '19px')
       injected.setMode('compat')
       injected.setBlur(40)
@@ -149,7 +188,24 @@ test('client starts without removed settingsScope and exposes reachable settings
   const restoredHandle = restored.options.store
   restored.options.inject(Object.fromEntries(Object.entries(restoredHandle.spec.actions).map(([name, action]) => [name, (...args) => action(restoredHandle.state, ...args)])))
   assert.equal(restoredHandle.state.sidebarFontSize, 19)
-  for (const dispose of disposers.reverse()) dispose()
+  assert.equal(restoredHandle.state.sidebarDensity, 'compact')
+  for (const dispose of disposers.splice(0).reverse()) dispose()
+  for (const stored of [null, 'invalid', 'COMPACT', '', 'regular']) {
+    if (stored === null) window.localStorage.removeItem('dsh.ui-aqua.sidebarDensity')
+    else window.localStorage.setItem('dsh.ui-aqua.sidebarDensity', stored)
+    entries.length = 0
+    plugin.apply(ctx)
+    const entry = entries.find(e => e.options.id === 'aqua')
+    const h = entry.options.store
+    const injected = entry.options.inject(Object.fromEntries(Object.entries(h.spec.actions).map(([name, action]) => [name, (...args) => action(h.state, ...args)])))
+    assert.equal(h.state.sidebarDensity, 'regular', `fallback from ${stored}`)
+    injected.setEnabled(true)
+    assert.equal(window.document.documentElement.getAttribute('data-dsh-aqua-sidebar-density'), 'regular')
+    injected.setSidebarDensity('compact')
+    for (const dispose of disposers.splice(0).reverse()) dispose()
+    assert.equal(window.document.documentElement.hasAttribute('data-dsh-aqua-sidebar-density'), false)
+    assert.equal(window.localStorage.getItem('dsh.ui-aqua.sidebarDensity'), 'compact')
+  }
   assert.equal(window.document.documentElement.hasAttribute('data-dsh-aqua'), false)
   assert.equal(window.document.querySelectorAll('style[data-plugin-css]').length, 4)
   // Compiling CSS modules independently must not reuse minified class names.

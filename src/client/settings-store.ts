@@ -13,6 +13,8 @@ export interface AquaRowState {
   mode: 'mica' | 'compat'
   /** Left-sidebar primary text size, px. */
   sidebarFontSize: number
+  /** Sidebar spacing, independent of typography and mode. */
+  sidebarDensity: 'regular' | 'compact'
   /** Glass blur radius, px. */
   blur: number
   /** Glass frost amount, 0-100. */
@@ -56,6 +58,8 @@ export interface AquaSettingsPayload {
   enabled: boolean
   mode: 'mica' | 'compat'
   sidebarFontSize: number
+  /** Sidebar spacing, independent of typography and mode. */
+  sidebarDensity: 'regular' | 'compact'
   blur: number
   frost: number
   fluidHue: number
@@ -90,6 +94,7 @@ export function createAquaRowStore(): EngineStoreHandle<AquaRowState, AquaRowAct
       enabled: true,
       mode: 'mica',
       sidebarFontSize: 16,
+      sidebarDensity: 'regular',
       blur: 20,
       frost: 7,
       fluidHue: 320,
@@ -115,6 +120,7 @@ export function createAquaRowStore(): EngineStoreHandle<AquaRowState, AquaRowAct
         d.enabled = next.enabled
         d.mode = next.mode
         d.sidebarFontSize = next.sidebarFontSize
+        d.sidebarDensity = next.sidebarDensity
         d.blur = next.blur
         d.frost = next.frost
         d.fluidHue = next.fluidHue

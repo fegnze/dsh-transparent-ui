@@ -49,6 +49,7 @@ export function apply(ctx: ClientContext): void {
       enabled: layer.getEnabled(),
       mode: s.mode,
       sidebarFontSize: s.sidebarFontSize,
+      sidebarDensity: s.sidebarDensity,
       blur: s.blur,
       frost: s.frost,
       fluidHue: s.fluidHue,
@@ -100,6 +101,10 @@ export function apply(ctx: ClientContext): void {
       },
       setMode: (mode) => {
         layer.setMode(mode)
+        sync()
+      },
+      setSidebarDensity: (value) => {
+        layer.setSidebarDensity(value)
         sync()
       },
       setSidebarFontSize: (value) => {

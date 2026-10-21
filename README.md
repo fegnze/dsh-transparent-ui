@@ -31,6 +31,8 @@ Distributed under [GNU AGPL-3.0](<LICENSE>); package metadata declares `AGPL-3.0
 | Desktop profile | `desktop` |
 | Recommended installation | This GitHub repository, branch `main` |
 
+Sidebar typography and compact spacing use the existing Aqua `data-*` theme gates and sidebar-root/row hooks, plus CSS-module class suffixes observed in the desktop UI (including better-sidebar). There is no official sidebar-density API: these CSS selectors are compatibility assumptions, not stable host contracts. A DSH or sidebar-plugin DOM/class change can make individual adjustments stop matching; recheck expanded/collapsed sidebars, long titles, large fonts and native window dragging after upgrades. DOM tests cannot establish Electron native drag safety.
+
 Other DSH versions are not guaranteed. A working legacy Web CLI does not prove compatibility with the desktop Host. Do not use an older `dsh` CLI to modify the desktop profile.
 
 ## Install and upgrade
@@ -71,6 +73,7 @@ The master switch and controls are in **Settings → General**. The master switc
 - **Mica mode:** floating glass panes and themed layout. Toolbar, composer/statistics wrapper and settings panel share the same primary glass material.
 - **Compatibility mode:** retains the host layout as much as possible and applies a more conservative glass treatment. Blur/frost controls are shown in Mica mode.
 - **Sidebar font size:** uses a native-style numeric stepper, without a slider (default 16px, 12–22px in whole pixels). Navigation and workspace names use the selected base size, session titles are 1px smaller, and timestamps are 3px smaller (for example 15/14/12px), all with line-height 1.5. Changes persist locally and work in both modes; conversation text and settings panel typography are unchanged. Disabling the theme restores native sidebar typography.
+- **Sidebar density:** **Regular** (default) preserves the current spacing exactly; **Compact** reduces brand/navigation/workspace-group whitespace and tree-row padding/height, without hiding titles, timestamps, controls or groups. It is independent of Mica/Compatibility mode and sidebar font size, and never applies global zoom or changes chat typography. The preference persists under `dsh.ui-aqua.sidebarDensity`; missing/invalid values fall back to Regular. Disabling/unloading Aqua removes the density attribute and overrides but retains the preference. Collapsed-sidebar geometry and native drag regions are not changed by this control.
 - **Sidebar fluid:** the fluid canvas follows the left sidebar's actual width, including resize/collapse. Hue and color depth are adjustable; the fluid no longer fills the chat column.
 - **Image/video wallpaper:** an alternative backdrop with separate media controls. Availability depends on browser storage, file access and media decoding.
 - **Particle whale, small fish and interactive mesh:** independently switchable background decorations. Brightness adjustment sits below the decorations, so brightening the board does not whiten them out. Foreground cards, modal masks and glass blur can still obscure them normally.
@@ -138,7 +141,7 @@ The [browser regression](<test/toolbar.browser.mjs>) uses an isolated headless f
 
 ### Verification boundaries
 
-- `npm test`: simulated DOM lifecycle/settings/material checks and instrumented Canvas draw calls; not a GPU visual test.
+- `npm test`: simulated DOM lifecycle/settings/material checks and instrumented Canvas draw calls; not a GPU visual test. Settings and density regressions compile the current client source in memory, without rewriting the shipped `lib/` bundle. Density checks cover Regular restoration, Compact scoping, disabled/collapsed states, persistence/fallback, both store mirrors and actual settings-button wiring; simulated DOM geometry snapshots are not live browser reflow or native drag acceptance.
 - `npm run test:browser`: real Chromium fixture hit-testing; **not** attachment to the live DSH desktop or a test of Electron's macOS native input routing.
 - Live desktop acceptance is still required for the latest toolbar fix, native window behavior, video/WebGL and combinations with other plugins.
 

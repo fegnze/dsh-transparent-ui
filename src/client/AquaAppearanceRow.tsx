@@ -24,6 +24,8 @@ import css from './AquaAppearanceRow.module.css'
 export interface AquaAppearanceRowInjected {
   /** Set the rendering mode. */
   setMode: (value: 'mica' | 'compat') => void
+  /** Set independent sidebar spacing. */
+  setSidebarDensity: (value: 'regular' | 'compact') => void
   /** Set independent left-sidebar typography, px. */
   setSidebarFontSize: (value: number) => void
   /** Set the glass blur radius, px. */
@@ -74,12 +76,13 @@ export type AquaAppearanceRowComponentProps =
  */
 export function AquaAppearanceRow(props: AquaAppearanceRowComponentProps) {
   const {
-    t, setMode, setSidebarFontSize, setBlur, setFrost, setFluidHue, setFluidDepth, setBgBrightness,
+    t, setMode, setSidebarDensity, setSidebarFontSize, setBlur, setFrost, setFluidHue, setFluidDepth, setBgBrightness,
     setBackground, setWallpaper, setWhale, setCritters, setMesh, setSpotlight, setPress,
     setWallpaperBlur, setWallpaperFrost, setVideoBlur, setVideoBrightness, authorizeVideo, useStore,
   } = props
   const enabled = useStore(s => s.enabled)
   const mode = useStore(s => s.mode)
+  const sidebarDensity = useStore(s => s.sidebarDensity)
   const sidebarFontSize = useStore(s => s.sidebarFontSize)
   const blur = useStore(s => s.blur)
   const frost = useStore(s => s.frost)
@@ -182,6 +185,22 @@ export function AquaAppearanceRow(props: AquaAppearanceRowComponentProps) {
   return (
     <div className={css.group}>
       <SidebarFontSize label={t('aqua.sidebarFontSize')} increaseLabel={t('aqua.increaseSidebarFontSize')} decreaseLabel={t('aqua.decreaseSidebarFontSize')} value={sidebarFontSize} onChange={setSidebarFontSize} />
+      <div className={css.subGroup}>
+        <div className={css.subTitle}>{t('aqua.sidebarDensity')}</div>
+        <div className={css.controls}>
+          <div className={css.row}>
+            <Segmented
+              label={t('aqua.sidebarDensity')}
+              value={sidebarDensity}
+              options={[
+                { id: 'regular', label: t('aqua.sidebarDensityRegular') },
+                { id: 'compact', label: t('aqua.sidebarDensityCompact') },
+              ]}
+              onSelect={setSidebarDensity}
+            />
+          </div>
+        </div>
+      </div>
       {/* 模式 */}
       <div className={css.subGroup}>
         <div className={css.subTitle}>{t('aqua.mode')}</div>

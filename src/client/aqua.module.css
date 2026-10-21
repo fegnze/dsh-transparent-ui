@@ -4,7 +4,9 @@
  * <html> while enabled (removed on disable, and the stylesheet itself is
  * unloaded with the plugin bundle), so off == the stock UI, exactly.
  * Selectors deliberately use attribute/element hooks and stable data-* seams
- * (never hashed module classes) so the layer survives recompiles.
+ * (never exact hashed module classes) so the layer survives recompiles.
+ * Sidebar adjustments also rely on observed CSS-module suffixes; DOM or
+ * suffix changes across host/plugin upgrades still require compatibility checks.
  * ========================================================================== */
 
 /* Independent sidebar typography. DOM verified on desktop 0.2.1-rc.2 with
@@ -27,6 +29,42 @@
 /* Keep existing ellipsis/flex layout; enlarge fixed-height rows only when needed. */
 [data-dsh-aqua] [data-dsh-sidebar-root] [role="treeitem"][data-row-key] {
   min-height: calc(var(--dsh-aqua-sidebar-font-size, 16px) * 1.5 + 8px);
+}
+
+/* Compact-only geometry. Host CSS-module suffixes are compatibility hooks,
+   not public APIs. Keep regular entirely rule-free. Never touch topStrip,
+   app-region, sidebar widths, collapsed rail, font size or chat typography. */
+[data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_logoRow"] {
+  height: 44px;
+  padding-block: 4px;
+  margin-bottom: 0;
+}
+/* Windows reserves logoRow for its native titlebar; leave that geometry alone. */
+[data-windows-titlebar][data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_logoRow"] {
+  height: 40px;
+  padding-block: 0;
+}
+[data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_panelList"] {
+  gap: 2px;
+  margin-bottom: 4px;
+}
+[data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_panelRow"] {
+  min-height: calc(var(--dsh-aqua-sidebar-font-size, 16px) * 1.5 + 4px);
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+[data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_sectionHeader"] {
+  height: auto;
+  min-height: 28px;
+  margin-block: 0 2px;
+}
+[data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [role="treeitem"][data-row-key] {
+  height: auto;
+  min-height: calc(var(--dsh-aqua-sidebar-font-size, 16px) * 1.5 + 4px);
+  padding-top: 2px;
+  padding-bottom: 2px;
+  /* Preserve the host's horizontal indentation and action layout. */
+  box-sizing: border-box;
 }
 
 /* ---------- Canvas: body paints the base color; the frame goes transparent

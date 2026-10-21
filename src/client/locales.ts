@@ -7,6 +7,9 @@ export const NS = 'settings.aqua'
 export const zh = {
   'aqua.title': '玻璃主题',
   'aqua.sidebarFontSize': '侧栏字号',
+  'aqua.sidebarDensity': '侧栏密度',
+  'aqua.sidebarDensityRegular': '常规',
+  'aqua.sidebarDensityCompact': '紧凑',
   'aqua.increaseSidebarFontSize': '增大侧栏字号',
   'aqua.decreaseSidebarFontSize': '减小侧栏字号',
   'aqua.description': '全局玻璃质感，云母/兼容双模式，模糊度、磨砂度、背景与颜色都可自由调节',
@@ -58,6 +61,9 @@ declare module '@deepseek-ai/dsh-client-ui-slots' {
 export const en = {
   'aqua.title': 'Glass theme',
   'aqua.sidebarFontSize': 'Sidebar font size',
+  'aqua.sidebarDensity': 'Sidebar density',
+  'aqua.sidebarDensityRegular': 'Regular',
+  'aqua.sidebarDensityCompact': 'Compact',
   'aqua.increaseSidebarFontSize': 'Increase sidebar font size',
   'aqua.decreaseSidebarFontSize': 'Decrease sidebar font size',
   'aqua.description': 'Global glassmorphism with mica/compatibility modes — blur, frost, backdrop, and color all adjustable',
