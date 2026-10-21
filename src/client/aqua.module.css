@@ -46,7 +46,8 @@
 }
 [data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_panelList"] {
   gap: 2px;
-  margin-bottom: 4px;
+  /* Separate primary navigation from the workspace browser without loosening rows. */
+  margin-bottom: 12px;
 }
 [data-dsh-aqua][data-dsh-aqua-sidebar-density="compact"] [data-dsh-frame]:not([data-sidebar-collapsed]) [data-dsh-sidebar-root] [class*="_panelRow"] {
   min-height: calc(var(--dsh-aqua-sidebar-font-size, 16px) * 1.5 + 4px);

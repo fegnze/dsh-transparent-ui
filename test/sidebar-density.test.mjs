@@ -38,6 +38,7 @@ for (const [label, css] of [['source', source], ['compiled source', compiled]]) 
         if (active) {
           assert.equal(style('brand').height, '44px')
           assert.equal(style('nav').gap, '2px')
+          assert.equal(style('nav').marginBottom, '12px', 'keep a distinct navigation/workspace boundary')
           assert.equal(style('section').minHeight, '28px')
           assert.equal(style('row').height, 'auto')
           assert.equal(style('row').paddingTop, '2px')
